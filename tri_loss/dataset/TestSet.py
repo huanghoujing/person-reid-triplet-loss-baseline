@@ -79,8 +79,7 @@ class TestSet(Dataset):
   def extract_feat(self, normalize_feat, verbose=True):
     """Extract the features of the whole image set.
     Args:
-      normalize_feat: True or False, whether to normalize global and local 
-        feature to unit length
+      normalize_feat: True or False, whether to normalize feature to unit length
       verbose: whether to print the progress of extracting feature
     Returns:
       feat: numpy array with shape [N, C]

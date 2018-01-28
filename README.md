@@ -1,6 +1,7 @@
-Play around triplet loss in person re-identification, using [pytorch](https://github.com/pytorch/pytorch).
+**Related Project:** [Strong Identification Loss Baseline](https://github.com/huanghoujing/beyond-part-models)
 
-**If you're looking for a strong identification loss baseline, [check here](https://github.com/huanghoujing/beyond-part-models).**
+This project provides a strong triplet loss baseline in person re-identification, using [pytorch](https://github.com/pytorch/pytorch).
+
 
 # Current Results
 
@@ -212,7 +213,7 @@ cmc_configs = {
 # Examples
 
 
-### Test
+## Test
 
 My training log and saved model weights for three datasets can be downloaded from [Google Drive](https://drive.google.com/open?id=14ljnClpZkHD7BzrET1q1eFQ_XhaRzM3-) or [BaiduYun](https://pan.baidu.com/s/1mjfTcxy).
 
@@ -235,7 +236,7 @@ python script/experiment/train.py \
 --model_weight_file THE_DOWNLOADED_MODEL_WEIGHT_FILE
 ```
 
-### Train
+## Train
 
 You can also train it by yourself. The following command performs training, validation and finally testing automatically.
 
@@ -253,6 +254,7 @@ python script/experiment/train.py \
 --only_test false \
 --dataset DATASET_NAME \
 --last_conv_stride STRIDE \
+--normalize_feature false \
 --trainset_part TRAINVAL_OR_TRAIN \
 --exp_dir EXPERIMENT_DIRECTORY \
 --steps_per_log 10 \
@@ -273,6 +275,40 @@ For more usage of TensorBoard, see the website and the help:
 ```bash
 tensorboard --help
 ```
+
+
+## Visualize Ranking List
+
+Specify
+- a dataset name (one of `['market1501', 'cuhk03', 'duke']`)
+- stride, `1` or `2`
+- either `model_weight_file` (the downloaded `model_weight.pth`) OR `ckpt_file` (saved `ckpt.pth` during training)
+- an experiment directory for saving images and log
+
+in the following command and run it.
+
+```bash
+python script/experiment/visualize_rank_list.py \
+-d '(0,)' \
+--num_queries 16 \
+--rank_list_size 10 \
+--dataset DATASET_NAME \
+--last_conv_stride STRIDE \
+--normalize_feature false \
+--exp_dir EXPERIMENT_DIRECTORY \
+--model_weight_file '' \
+--ckpt_file ''
+```
+
+Each query image and its ranking list would be saved to an image in directory `EXPERIMENT_DIRECTORY/rank_lists`. As shown in following examples, green boundary is added to true positive, and red to false positve.
+
+![](example_rank_lists_on_Duke/00000126_0002_00000021.jpg)
+
+![](example_rank_lists_on_Duke/00000147_0003_00000004.jpg)
+
+![](example_rank_lists_on_Duke/00000169_0001_00000008.jpg)
+
+![](example_rank_lists_on_Duke/00000257_0003_00000004.jpg)
 
 
 # Time and Space Consumption
@@ -309,9 +345,9 @@ Taking Market1501 as an example
 
 # References & Credits
 
+- [In Defense of the Triplet Loss for Person Re-Identification](https://arxiv.org/abs/1703.07737)
 - [Beyond Part Models: Person Retrieval with Refined Part Pooling](https://arxiv.org/abs/1711.09349)
 - [open-reid](https://github.com/Cysu/open-reid)
-- [In Defense of the Triplet Loss for Person Re-Identification](https://arxiv.org/abs/1703.07737)
 - [Re-ranking Person Re-identification with k-reciprocal Encoding](https://github.com/zhunzhong07/person-re-ranking)
 - [Market1501](http://www.liangzheng.org/Project/project_reid.html)
 - [CUHK03](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html)

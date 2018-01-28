@@ -48,8 +48,8 @@ class Config(object):
     parser.add_argument('--trainset_part', type=str, default='trainval',
                         choices=['trainval', 'train'])
 
-    # Only for training set.
     parser.add_argument('--resize_h_w', type=eval, default=(256, 128))
+    # These several only for training set
     parser.add_argument('--crop_prob', type=float, default=0)
     parser.add_argument('--crop_ratio', type=float, default=1)
     parser.add_argument('--mirror', type=str2bool, default=True)
@@ -60,7 +60,7 @@ class Config(object):
     parser.add_argument('--steps_per_log', type=int, default=20)
     parser.add_argument('--epochs_per_val', type=int, default=1e10)
 
-    parser.add_argument('--last_conv_stride', type=int, default=2,
+    parser.add_argument('--last_conv_stride', type=int, default=1,
                         choices=[1, 2])
     parser.add_argument('--normalize_feature', type=str2bool, default=False)
     parser.add_argument('--margin', type=float, default=0.3)
@@ -85,6 +85,8 @@ class Config(object):
     # gpu ids
     self.sys_device_ids = args.sys_device_ids
 
+    # If you want to make your results exactly reproducible, you have
+    # to fix a random seed.
     if args.set_seed:
       self.seed = 1
     else:
@@ -98,8 +100,8 @@ class Config(object):
     # Dataset #
     ###########
 
-    # If you want to exactly reproduce the result in training, you have to set
-    # num of threads to 1.
+    # If you want to make your results exactly reproducible, you have
+    # to also set num of threads to 1 during training.
     if self.seed is not None:
       self.prefetch_threads = 1
     else:
