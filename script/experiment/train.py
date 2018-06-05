@@ -73,12 +73,12 @@ class Config(object):
     parser.add_argument('--base_lr', type=float, default=2e-4)
     parser.add_argument('--lr_decay_type', type=str, default='exp',
                         choices=['exp', 'staircase'])
-    parser.add_argument('--exp_decay_at_epoch', type=int, default=76)
+    parser.add_argument('--exp_decay_at_epoch', type=int, default=151)
     parser.add_argument('--staircase_decay_at_epochs',
                         type=eval, default=(101, 201,))
     parser.add_argument('--staircase_decay_multiply_factor',
                         type=float, default=0.1)
-    parser.add_argument('--total_epochs', type=int, default=150)
+    parser.add_argument('--total_epochs', type=int, default=300)
 
     args = parser.parse_args()
 
@@ -126,7 +126,7 @@ class Config(object):
 
     self.ids_per_batch = args.ids_per_batch
     self.ims_per_id = args.ims_per_id
-    self.train_final_batch = True
+    self.train_final_batch = False
     self.train_shuffle = True
 
     self.test_batch_size = 32
@@ -321,7 +321,8 @@ def main():
 
   if not cfg.only_test:
     train_set = create_dataset(**cfg.train_set_kwargs)
-    val_set = create_dataset(**cfg.val_set_kwargs)
+    # The combined dataset does not provide val set currently.
+    val_set = None if cfg.dataset == 'combined' else create_dataset(**cfg.val_set_kwargs)
 
   test_sets = []
   test_set_names = []
@@ -511,7 +512,7 @@ def main():
     ##########################
 
     mAP, Rank1 = 0, 0
-    if (ep + 1) % cfg.epochs_per_val == 0:
+    if ((ep + 1) % cfg.epochs_per_val == 0) and (val_set is not None):
       mAP, Rank1 = validate()
 
     # Log to TensorBoard
