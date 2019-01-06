@@ -213,6 +213,13 @@ cmc_configs = {
 
 # Examples
 
+## Inference
+
+You can use a trained model to extract features for a list of images, and then perform whatever you desire with these features. An example is
+```bash
+python script/experiment/infer_images_example.py \
+--model_weight_file YOUR_MODEL_WEIGHT_FILE
+```
 
 ## Test
 
